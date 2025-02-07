@@ -23,11 +23,34 @@ enum Command {
     Append(usize),
 }
 
-mod my_module {
-    use super::Command;
+pub mod my_module {
+    use crate::Command; // modules root dung crate -> modules cha dung super
 
     // TODO: Complete the function as described above.
-    // pub fn transformer(input: ???) -> ??? { ??? }
+    pub(crate) fn transformer(input: Vec<(String , Command)>) -> Vec<String> {
+        input
+        .into_iter()
+        .map(|(text , command )| match command {
+            Command::Uppercase => text.to_uppercase(),
+            Command::Trim => text.trim().to_string(),
+            Command::Append(n) => text + &"bar".repeat(n),
+        })
+        .collect()
+    }
+    //Nhắc lại về phương thức vector
+    //insert(index,value) : để thêm vào cuối mảng 
+    //push() : thêm vào phần tử 
+    //pop() lấy phần tử ra khỏi mảng 
+    //remove(index)
+    //get(index) : lấy ra Some()
+    //iter() : Trả về itorator mượn &T
+    //iter_mut() : Trả về itor chỉnh sửa được 
+    //into_mut () : trả về itor Mượn T
+    //sort() : sắp xếp vector
+    //sort_by(|a,b| Tùy chỉnh )
+    //reverse() đảo ngược 
+    //map() + collect(): Chuyển đổi phần tử
+    //constains(&value) -> bool : kiểm tra giá trị có không
 }
 
 fn main() {
@@ -37,9 +60,8 @@ fn main() {
 #[cfg(test)]
 mod tests {
     // TODO: What do we need to import to have `transformer` in scope?
-    // use ???;
+    use crate::my_module;
     use super::Command;
-
     #[test]
     fn it_works() {
         let input = vec![
@@ -48,7 +70,7 @@ mod tests {
             ("foo".to_string(), Command::Append(1)),
             ("bar".to_string(), Command::Append(5)),
         ];
-        let output = transformer(input);
+        let output = my_module::transformer(input);
 
         assert_eq!(
             output,
